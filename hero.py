@@ -4,7 +4,8 @@ BASE_URL = "https://akabab.github.io/superhero-api/api"
 
 
 def get_heroes(HERO_API: str):
-    response = requests.get(f"{HERO_API}/all.json")
+    response = requests.get(f"{HERO_API}/all.json", timeout=5)
+    response.raise_for_status()
     return response.json()
             
 def edit_height(height: str):
