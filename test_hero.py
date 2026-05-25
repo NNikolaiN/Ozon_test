@@ -116,4 +116,11 @@ def test_broken_height(mock_hero_api):
         tallest = get_tallest_hero("Male", True)
         assert tallest is not None
         assert tallest["name"] == "Superman"
-        
+
+@pytest.mark.parametrize("sex, work", [("Male", True),("Male", False), ("Female", True), ("Female", False)])
+def test_real_API_height(sex, work):
+    tallest = get_tallest_hero(sex, work)
+    
+    assert tallest is not None
+    assert isinstance(tallest["name"], str)
+    assert tallest["height"] > 0
