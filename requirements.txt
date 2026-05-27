@@ -1,5 +1,7 @@
 annotated-types==0.7.0
 attrs==25.4.0
+allure-pytest==2.15.3
+allure-python-commons==2.15.3
 certifi==2026.1.4
 charset-normalizer==3.4.4
 colorama==0.4.6

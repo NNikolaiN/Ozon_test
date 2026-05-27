@@ -1,8 +1,11 @@
 import pytest
+import allure
 import requests_mock
 from hero import BASE_URL, get_tallest_hero
 
+# Решил добавить аллур, чтобы потренить и просто показать, что умею
 # Создал мок чтобы можно было сделать больше тестов и проверить на устойчвость функцию
+
 @pytest.fixture
 def mock_hero_api():
     return [
@@ -63,8 +66,8 @@ def mock_hero_api():
         }
     ]
 
-
-# Попарное тестирование
+@allure.title("Попарное тестирование")
+@allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.parametrize("sex, work, expected_name", [
     ("Male", True, "Superman"),
     ("Male", False, "Batman"),
@@ -83,12 +86,13 @@ def test_get_tallest_hero(sex, work, expected_name, mock_hero_api):
             assert tallest["height"] > 0
 
 
-# Граничные значения
+@allure.title("Пустой список героев")
 def test_empty_heroes_list():
     with requests_mock.Mocker() as m:
         m.get(f"{BASE_URL}/all.json", json=[])
         assert get_tallest_hero("Male", True) is None
 
+@allure.title("Один герой")
 def test_single_hero():
     single_hero = [{
             "id": 1,
@@ -108,7 +112,8 @@ def test_single_hero():
         assert tallest is not None
         assert tallest["name"] == "A-Bomb" 
         assert tallest["height"] == 203.0 
-        
+
+@allure.title("Тестирование с кривыми данными о росте")       
 def test_broken_height(mock_hero_api):
     with requests_mock.Mocker() as m:
         m.get(f"{BASE_URL}/all.json", json=mock_hero_api)
@@ -117,7 +122,13 @@ def test_broken_height(mock_hero_api):
         assert tallest is not None
         assert tallest["name"] == "Superman"
 
-@pytest.mark.parametrize("sex, work", [("Male", True),("Male", False), ("Female", True), ("Female", False)])
+@allure.title("Тестирование реального апи")
+@pytest.mark.parametrize(
+    "sex, work", 
+    [("Male", True),
+    ("Male", False), 
+    ("Female", True), 
+    ("Female", False)])
 def test_real_API_height(sex, work):
     tallest = get_tallest_hero(sex, work)
     
