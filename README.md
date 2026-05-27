@@ -24,5 +24,11 @@ pip install -r requirements.txt
 ```
 ### 3. Запуск тестов
 ```bash
-pytest -v
+pytest test_hero.py --alluredir=allure-results
+```
+
+### 4. Просмотр Allure-отчета
+```bash
+allure generate allure-results -o allure-report --clean
+allure open allure-report     
 ```
